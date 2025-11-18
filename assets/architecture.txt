@@ -1,0 +1,65 @@
+Architecture Diagram Placeholder
+
+FLASK NOTES API ARCHITECTURE
+
+┌─────────────────┐
+│   Client/User   │
+└────────┬────────┘
+         │ HTTP Requests
+         ▼
+┌─────────────────────────────────┐
+│      Flask Application          │
+│  ┌───────────────────────────┐  │
+│  │   Routes (Blueprints)     │  │
+│  │  - POST /notes            │  │
+│  │  - GET /notes             │  │
+│  │  - GET /notes/<id>        │  │
+│  │  - GET /notes/search      │  │
+│  │  - DELETE /notes/<id>     │  │
+│  │  - GET /metrics            │  │
+│  └───────────────────────────┘  │
+│  ┌───────────────────────────┐  │
+│  │   Metrics Module          │  │
+│  │  - Uptime tracking        │  │
+│  │  - Request counting      │  │
+│  │  - Notes counting        │  │
+│  └───────────────────────────┘  │
+│  ┌───────────────────────────┐  │
+│  │   Logging Middleware      │  │
+│  │  - Request logging        │  │
+│  └───────────────────────────┘  │
+└────────┬────────────────────────┘
+         │
+         │ MongoDB Driver (pymongo)
+         ▼
+┌─────────────────┐
+│    MongoDB      │
+│   Container     │
+│  ┌───────────┐  │
+│  │  notes    │  │
+│  │ collection│  │
+│  └───────────┘  │
+└─────────────────┘
+
+DEPLOYMENT ARCHITECTURE (Render.com)
+
+┌─────────────────┐
+│   Internet      │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Render.com     │
+│  Flask Service  │
+└────────┬────────┘
+         │
+         │ MONGO_URI (env var)
+         ▼
+┌─────────────────┐
+│ MongoDB Atlas    │
+│ (Cloud DB)      │
+└─────────────────┘
+
+Note: Replace this file with an actual architecture.png diagram
+when creating visual documentation.
+
