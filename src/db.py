@@ -3,9 +3,6 @@ MongoDB Database Connection Module
 
 This module handles MongoDB connection initialization, database access,
 and connection management. It creates indexes for optimal query performance.
-
-Author: Flask Notes API Team
-License: MIT
 """
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure

@@ -3,9 +3,6 @@ Flask Notes API - Main Application
 
 This module initializes the Flask application, configures middleware,
 registers blueprints, and sets up request logging.
-
-Author: Flask Notes API Team
-License: MIT
 """
 import os
 from flask import Flask

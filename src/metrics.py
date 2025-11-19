@@ -4,9 +4,6 @@ Metrics Tracking Module
 This module provides application metrics including uptime, request counts,
 and database statistics. Metrics are tracked in-memory and exposed via
 the /metrics endpoint.
-
-Author: Flask Notes API Team
-License: MIT
 """
 import time
 import logging

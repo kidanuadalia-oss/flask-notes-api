@@ -5,9 +5,6 @@ This module defines all REST API endpoints for note management:
 - Create, read, update, delete operations
 - Search functionality
 - Error handling and validation
-
-Author: Flask Notes API Team
-License: MIT
 """
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
