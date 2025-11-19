@@ -390,10 +390,31 @@ Response:
 }
 ```
 
+## CI/CD Pipeline
+
+The project includes a GitHub Actions CI workflow (`.github/workflows/ci.yml`) that:
+- Runs automatically on every push and pull request
+- Sets up MongoDB service for testing
+- Runs the full test suite
+- Validates code compilation
+
+**To enable CI:**
+1. Go to https://github.com/settings/tokens
+2. Edit your token or create a new one
+3. Add the `workflow` scope
+4. The CI will run automatically on your next push
+
+Alternatively, you can add the workflow file directly on GitHub:
+1. Go to your repository on GitHub
+2. Click "Add file" → "Create new file"
+3. Path: `.github/workflows/ci.yml`
+4. Copy the contents from the local file
+5. Commit directly on GitHub
+
 ## Links
 
 - **GitHub Repository:** https://github.com/kidanuadalia-oss/flask-notes-api
-- **Render Deployment:** [Add URL after deploying]
+- **Render Deployment:** [Deploy using instructions above, then add your URL here]
 
 ## Contributing
 
