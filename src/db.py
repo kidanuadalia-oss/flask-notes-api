@@ -1,5 +1,5 @@
 """
-MongoDB connection and database setup
+MongoDB database connection and initialization
 """
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -12,7 +12,7 @@ db_client = None
 db = None
 
 def init_db(mongo_uri):
-    """Connect to MongoDB and create indexes"""
+    """Initialize MongoDB connection and create indexes for performance"""
     global db_client, db
     
     try:
@@ -34,7 +34,7 @@ def init_db(mongo_uri):
         raise
 
 def get_db():
-    """Get the database connection"""
+    """Get the database instance"""
     if db is None:
         raise RuntimeError("Database not initialized. Call init_db() first.")
     return db

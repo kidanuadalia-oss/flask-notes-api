@@ -1,5 +1,6 @@
 """
-API routes for notes - CRUD operations and search
+API routes for note management
+Handles CRUD operations and search functionality
 """
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 notes_bp = Blueprint('notes', __name__, url_prefix='/notes')
 
 def serialize_note(note):
-    """Converts MongoDB doc to JSON (ObjectId to string, datetime to ISO)"""
+    """Converts MongoDB document to JSON-serializable format"""
     if note:
         note['_id'] = str(note['_id'])
         if 'created_at' in note and isinstance(note['created_at'], datetime):
@@ -22,7 +23,7 @@ def serialize_note(note):
 
 @notes_bp.route('', methods=['POST'])
 def create_note():
-    """Create a new note. Needs title, body is optional."""
+    """Create a new note. Title is required, body is optional."""
     try:
         data = request.get_json()
         
@@ -56,7 +57,7 @@ def create_note():
 
 @notes_bp.route('', methods=['GET'])
 def list_notes():
-    """Get all notes, newest first"""
+    """Retrieve all notes, sorted by creation date (newest first)"""
     try:
         db = get_db()
         notes = list(db.notes.find().sort('created_at', -1))
@@ -73,7 +74,7 @@ def list_notes():
 
 @notes_bp.route('/<note_id>', methods=['GET'])
 def get_note(note_id):
-    """Get a note by its ID"""
+    """Retrieve a specific note by its ID"""
     try:
         if not ObjectId.is_valid(note_id):
             return jsonify({'error': 'Invalid note ID'}), 400
@@ -93,7 +94,7 @@ def get_note(note_id):
 
 @notes_bp.route('/search', methods=['GET'])
 def search_notes():
-    """Search notes by title or body. Use ?q=searchterm"""
+    """Search notes by title or body content. Query parameter: ?q=searchterm"""
     try:
         query = request.args.get('q', '').strip()
         
@@ -122,7 +123,7 @@ def search_notes():
 
 @notes_bp.route('/<note_id>', methods=['DELETE'])
 def delete_note(note_id):
-    """Delete a note by ID"""
+    """Delete a note by its ID"""
     try:
         if not ObjectId.is_valid(note_id):
             return jsonify({'error': 'Invalid note ID'}), 400
