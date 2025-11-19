@@ -1,5 +1,12 @@
 """
 Metrics Tracking Module
+
+This module provides application metrics including uptime, request counts,
+and database statistics. Metrics are tracked in-memory and exposed via
+the /metrics endpoint.
+
+Author: Flask Notes API Team
+License: MIT
 """
 import time
 import logging
@@ -17,7 +24,12 @@ total_requests = 0
 total_notes_created = 0
 
 def init_metrics():
-    """Initialize metrics tracking."""
+    """
+    Initialize metrics tracking by setting the application start time.
+    
+    This should be called once when the application starts. The start time
+    is used to calculate uptime for the /metrics endpoint.
+    """
     global start_time
     start_time = time.time()
     logger.info("Metrics initialized")

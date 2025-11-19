@@ -1,5 +1,11 @@
 """
 Flask Notes API - Main Application
+
+This module initializes the Flask application, configures middleware,
+registers blueprints, and sets up request logging.
+
+Author: Flask Notes API Team
+License: MIT
 """
 import os
 from flask import Flask
@@ -9,7 +15,24 @@ from src.routes import notes_bp
 from src.metrics import metrics_bp, init_metrics
 
 def create_app():
-    """Create and configure the Flask application."""
+    """
+    Create and configure the Flask application.
+    
+    This factory function creates a Flask app instance, configures CORS,
+    initializes the database connection, sets up metrics tracking, and
+    registers all API blueprints.
+    
+    Environment Variables:
+        MONGO_URI: MongoDB connection string (default: mongodb://mongo:27017/notes)
+        FLASK_ENV: Flask environment mode (default: development)
+        PORT: Port to run the application on (default: 8080)
+    
+    Returns:
+        Flask: Configured Flask application instance
+    
+    Raises:
+        ConnectionFailure: If MongoDB connection fails
+    """
     app = Flask(__name__)
     
     # Enable CORS
@@ -32,12 +55,27 @@ def create_app():
     # Request logging middleware
     @app.before_request
     def log_request():
+        """
+        Log all incoming requests before processing.
+        
+        This middleware runs before every request and logs the HTTP method,
+        path, and timestamp. It also increments the request counter for metrics.
+        """
         from src.metrics import log_request_metric
         log_request_metric()
     
     @app.route('/health')
     def health():
-        """Health check endpoint."""
+        """
+        Health check endpoint for monitoring and load balancers.
+        
+        Returns:
+            dict: JSON response with status 'healthy'
+            int: HTTP status code 200
+        
+        Example:
+            GET /health -> {"status": "healthy"}
+        """
         return {'status': 'healthy'}, 200
     
     return app
