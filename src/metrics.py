@@ -1,9 +1,5 @@
 """
-Metrics Tracking Module
-
-This module provides application metrics including uptime, request counts,
-and database statistics. Metrics are tracked in-memory and exposed via
-the /metrics endpoint.
+Metrics tracking - uptime, request counts, note counts
 """
 import time
 import logging
@@ -21,18 +17,13 @@ total_requests = 0
 total_notes_created = 0
 
 def init_metrics():
-    """
-    Initialize metrics tracking by setting the application start time.
-    
-    This should be called once when the application starts. The start time
-    is used to calculate uptime for the /metrics endpoint.
-    """
+    """Initialize metrics - sets start time"""
     global start_time
     start_time = time.time()
     logger.info("Metrics initialized")
 
 def log_request_metric():
-    """Log a request and increment counter."""
+    """Log a request and bump the counter"""
     global total_requests
     total_requests += 1
     
@@ -41,18 +32,18 @@ def log_request_metric():
     logger.info(f"Request: {request.method} {request.path} - {datetime.utcnow().isoformat()}")
 
 def increment_notes_counter():
-    """Increment the notes creation counter."""
+    """Count when a note is created"""
     global total_notes_created
     total_notes_created += 1
 
 def get_uptime():
-    """Get application uptime in seconds."""
+    """Get how long the app has been running (seconds)"""
     if start_time is None:
         return 0
     return int(time.time() - start_time)
 
 def get_total_notes_in_db():
-    """Get total number of notes in database."""
+    """Count notes in the database"""
     try:
         db = get_db()
         return db.notes.count_documents({})
@@ -62,7 +53,7 @@ def get_total_notes_in_db():
 
 @metrics_bp.route('', methods=['GET'])
 def get_metrics():
-    """Get application metrics."""
+    """Get all metrics - uptime, requests, notes, etc"""
     try:
         uptime_seconds = get_uptime()
         

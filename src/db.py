@@ -1,8 +1,5 @@
 """
-MongoDB Database Connection Module
-
-This module handles MongoDB connection initialization, database access,
-and connection management. It creates indexes for optimal query performance.
+MongoDB connection and database setup
 """
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -15,12 +12,7 @@ db_client = None
 db = None
 
 def init_db(mongo_uri):
-    """
-    Initialize MongoDB connection.
-    
-    Args:
-        mongo_uri: MongoDB connection URI
-    """
+    """Connect to MongoDB and create indexes"""
     global db_client, db
     
     try:
@@ -42,12 +34,7 @@ def init_db(mongo_uri):
         raise
 
 def get_db():
-    """
-    Get the database instance.
-    
-    Returns:
-        Database instance
-    """
+    """Get the database connection"""
     if db is None:
         raise RuntimeError("Database not initialized. Call init_db() first.")
     return db

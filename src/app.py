@@ -1,8 +1,5 @@
 """
-Flask Notes API - Main Application
-
-This module initializes the Flask application, configures middleware,
-registers blueprints, and sets up request logging.
+Main Flask app setup
 """
 import os
 from flask import Flask
@@ -13,22 +10,8 @@ from src.metrics import metrics_bp, init_metrics
 
 def create_app():
     """
-    Create and configure the Flask application.
-    
-    This factory function creates a Flask app instance, configures CORS,
-    initializes the database connection, sets up metrics tracking, and
-    registers all API blueprints.
-    
-    Environment Variables:
-        MONGO_URI: MongoDB connection string (default: mongodb://mongo:27017/notes)
-        FLASK_ENV: Flask environment mode (default: development)
-        PORT: Port to run the application on (default: 8080)
-    
-    Returns:
-        Flask: Configured Flask application instance
-    
-    Raises:
-        ConnectionFailure: If MongoDB connection fails
+    Creates and configures the Flask app.
+    Sets up CORS, connects to MongoDB, initializes metrics, and registers routes.
     """
     app = Flask(__name__)
     
@@ -49,30 +32,16 @@ def create_app():
     app.register_blueprint(notes_bp)
     app.register_blueprint(metrics_bp)
     
-    # Request logging middleware
+    # Log all requests
     @app.before_request
     def log_request():
-        """
-        Log all incoming requests before processing.
-        
-        This middleware runs before every request and logs the HTTP method,
-        path, and timestamp. It also increments the request counter for metrics.
-        """
+        """Logs each request for debugging"""
         from src.metrics import log_request_metric
         log_request_metric()
     
     @app.route('/health')
     def health():
-        """
-        Health check endpoint for monitoring and load balancers.
-        
-        Returns:
-            dict: JSON response with status 'healthy'
-            int: HTTP status code 200
-        
-        Example:
-            GET /health -> {"status": "healthy"}
-        """
+        """Health check endpoint"""
         return {'status': 'healthy'}, 200
     
     return app
