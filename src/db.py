@@ -1,6 +1,7 @@
 """
 MongoDB database connection and initialization
 """
+import os
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import logging
@@ -38,9 +39,23 @@ def init_db(mongo_uri):
         # Don't raise - let the app start, connections will be retried on requests
 
 def get_db():
-    """Get the database instance"""
+    """Get the database instance, retry connection if needed"""
+    global db_client, db
+    
     if db is None:
-        raise RuntimeError("Database not initialized. Call init_db() first.")
+        # Try to reconnect
+        mongo_uri = os.getenv('MONGO_URI', 'mongodb://mongo:27017/notes')
+        try:
+            db_client = MongoClient(mongo_uri, serverSelectionTimeoutMS=10000)
+            db_client.server_info()
+            db_name = mongo_uri.split('/')[-1].split('?')[0] if '/' in mongo_uri else 'notes'
+            if not db_name:
+                db_name = 'notes'
+            db = db_client[db_name]
+            logger.info(f"Reconnected to MongoDB: {db_name}")
+        except Exception as e:
+            logger.error(f"Database connection failed: {e}")
+            raise RuntimeError(f"Database not available: {e}")
     return db
 
 def close_db():
